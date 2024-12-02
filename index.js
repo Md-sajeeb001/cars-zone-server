@@ -27,6 +27,7 @@ async function run() {
     await client.connect();
 
     const CarCollection = client.db("carsDB").collection("cars");
+    const userCollection = client.db("carsDB").collection("users");
 
     app.get("/cars", async (req, res) => {
       const cursor = CarCollection.find();
@@ -71,6 +72,20 @@ async function run() {
       const result = await CarCollection.deleteOne(quary);
       res.send(result);
     });
+
+    // user relatd apis!
+
+    app.post("/users", async (req, res)=>{
+      const newUser = req.body;
+      const result = await userCollection.insertOne(newUser);
+      res.send(result)
+    })
+
+    app.get("/users", async (req, res)=>{
+      const quary = userCollection.find();
+      const result = await quary.toArray();
+      res.send(result)
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
