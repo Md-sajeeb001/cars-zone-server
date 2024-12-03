@@ -75,17 +75,31 @@ async function run() {
 
     // user relatd apis!
 
-    app.post("/users", async (req, res)=>{
+    app.post("/users", async (req, res) => {
       const newUser = req.body;
       const result = await userCollection.insertOne(newUser);
-      res.send(result)
-    })
+      res.send(result);
+    });
 
-    app.get("/users", async (req, res)=>{
+    app.get("/users", async (req, res) => {
       const quary = userCollection.find();
       const result = await quary.toArray();
-      res.send(result)
-    })
+      res.send(result);
+    });
+
+    app.get("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const quary = { _id: new ObjectId(id) };
+      const result = await userCollection.findOne(quary);
+      res.send(result);
+    });
+
+    app.delete("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const quary = { _id: new ObjectId(id) };
+      const result = await userCollection.deleteOne(quary);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
